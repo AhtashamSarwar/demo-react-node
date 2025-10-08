@@ -48,7 +48,7 @@ pipeline {
                 docker rm -f demo-frontend || true
                 docker rm -f demo-backend || true
                 docker run -d -p 3010:80 --name demo-frontend demo-frontend:latest
-                docker run -d -p 5000:5000 --name demo-backend demo-backend:latest
+                docker run -d -p 5050:5000 --name demo-backend demo-backend:latest
                 '''
             }
         }
