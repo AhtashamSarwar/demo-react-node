@@ -10,30 +10,37 @@ pipeline {
         }
 
         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:18'
+                    args '-v $PWD:/app -w /app'
+                }
+            }
             steps {
                 echo 'Installing dependencies for frontend and backend...'
                 sh '''
-                cd backend
-                npm install
-                cd ../frontend
-                npm install
+                cd backend && npm install
+                cd ../frontend && npm install
                 '''
             }
         }
 
         stage('Build React App') {
+            agent {
+                docker {
+                    image 'node:18'
+                    args '-v $PWD:/app -w /app'
+                }
+            }
             steps {
                 echo 'Building React app...'
-                sh '''
-                cd frontend
-                npm run build
-                '''
+                sh 'cd frontend && npm run build'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                echo 'Building Docker images for frontend and backend...'
+                echo 'Building Docker images...'
                 sh '''
                 docker build -t demo-frontend:latest ./frontend
                 docker build -t demo-backend:latest ./backend
@@ -63,4 +70,3 @@ pipeline {
         }
     }
 }
-
